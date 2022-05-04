@@ -23,17 +23,24 @@ const splToken = require('@solana/spl-token');
     const mint = await splToken.createMint(connection, fromWallet, fromWallet.publicKey, null, 9);
 
     // Get the token account of the fromWallet address, and if it does not exist, create it
+    // https://solana-labs.github.io/solana-program-library/token/js/modules.html#mintTo
     const fromTokenAccount = await splToken.getOrCreateAssociatedTokenAccount(
         connection,
-        fromWallet,
-        mint,
+        fromWallet, // who pays fee if associated token account does not exist
+        mint, // public address of token
         fromWallet.publicKey
     );
 
     // Get the token account of the toWallet address, and if it does not exist, create it
-    const toTokenAccount = await splToken.getOrCreateAssociatedTokenAccount(connection, fromWallet, mint, toWallet.publicKey);
+    // https://solana-labs.github.io/solana-program-library/token/js/modules.html#getOrCreateAssociatedTokenAccount
+    const toTokenAccount = await splToken.getOrCreateAssociatedTokenAccount(
+    connection, 
+    fromWallet, // who pays fee if associated token account does not exist
+    mint, // public address of token
+    toWallet.publicKey);
 
     // Mint 1 new token to the "fromTokenAccount" account we just created
+    // https://solana-labs.github.io/solana-program-library/token/js/modules.html#mintTo
     let signature = await splToken.mintTo(
         connection,
         fromWallet,
@@ -46,13 +53,14 @@ const splToken = require('@solana/spl-token');
     console.log('mint tx:', signature);
 
     // Transfer the new token to the "toTokenAccount" we just created
+    // https://solana-labs.github.io/solana-program-library/token/js/modules.html#transfer
     signature = await splToken.transfer(
         connection,
-        fromWallet,
+        fromWallet, // who pays fees
         fromTokenAccount.address,
         toTokenAccount.address,
-        fromWallet.publicKey,
-        1000000000,
+        fromWallet.publicKey, // owner of source account
+        1000000000, // amount
         []
     );
     console.log('transfer tx:', signature);})();
