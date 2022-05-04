@@ -24,7 +24,7 @@ const web3 = require('@solana/web3.js');
     web3.SystemProgram.transfer({
       fromPubkey: fromWallet.publicKey,
       toPubkey: toWallet.publicKey,
-      kamports: web3.LAMPORTS_PER_SOL / 100,
+      lamports: web3.LAMPORTS_PER_SOL / 100
     })
   );
 

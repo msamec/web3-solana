@@ -4,8 +4,8 @@ const splTokenRegistry = require('@solana/spl-token-registry');
 
 (async () => {
   const list = new splTokenRegistry.TokenListProvider().resolve().then((tokens) => {
-    const tokenList = tokens.filterByClusterSlug('mainnet-beta').getList();
-    console.log(tokenList);
+    const tokenList = tokens.filterByClusterSlug('devnet').getList();
+    //console.log(tokenList);
   });
 
   const connection = new web3.Connection(
